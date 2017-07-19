@@ -1,16 +1,39 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
+author: "Hannon Queiroz"
 output: 
   html_document:
     keep_md: true
 ---
+## Loading necessary libraries
+```{r results='hide', message=FALSE}
+library(data.table)
+library(dplyr)
+library(ggplot2)
+```
 
 
 ## Loading and preprocessing the data
-
-
+```{r}
+activities <- fread('unzip -cq activity.zip')
+activities$date <- as.Date(activities$date, "%Y-%m-%d")
+print(head(activities))
+```
 
 ## What is mean total number of steps taken per day?
+1. Calculate the total number of steps taken per day (ignoring NAs)
+```{r}
+steps_per_day <- activities %>%
+    group_by(date) %>%
+    summarise(
+        total_steps = sum(steps, na.rm=TRUE)    
+    )
+print(head(steps_per_day))
+hist(steps_per_day$total_steps,
+     main = "Histogram of total setps taken per day",
+     xlab = "Total Steps",
+     col = "blue")
+```
 
 
 
