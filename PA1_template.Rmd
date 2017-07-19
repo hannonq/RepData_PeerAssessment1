@@ -29,19 +29,70 @@ steps_per_day <- activities %>%
         total_steps = sum(steps, na.rm=TRUE)    
     )
 print(head(steps_per_day))
+```
+
+2. Make a histogram of the total number of steps taken each day
+```{r}
 hist(steps_per_day$total_steps,
      main = "Histogram of total setps taken per day",
      xlab = "Total Steps",
      col = "blue")
 ```
 
+3. Calculate and report the mean and median of the total number of steps taken per day
+```{r}
+steps_mean <- mean(steps_per_day$total_steps, na.rm = TRUE)
+steps_median <- median(steps_per_day$total_steps, na.rm = TRUE)
+```
+The mean of the total steps taken per day is `r steps_mean`.  
+The mediean of the total steps taken per day is `r steps_median`.  
 
 
 ## What is the average daily activity pattern?
+1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+```{r}
+steps_interval <- activities %>%
+    group_by(interval) %>%
+    summarise(
+        number_steps = mean(steps, na.rm = TRUE)
+    )
+print(head(steps_interval))
+ggplot(data = steps_interval, aes(x = interval, y = number_steps)) + 
+    ggtitle("Average number of steps taken") +
+    xlab("Interval") +
+    ylab("Average number of steps") +
+    geom_line()
+```
 
+
+2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+```{r}
+max_interval = arrange(steps_interval, desc(number_steps))[1,]
+print(max_interval)
+```
+
+The 5-minute inteval that contains, on average, the maximum number of steps is inteval `r max_interval[1]`, with `r max_interval[2]` steps.
 
 
 ## Imputing missing values
+1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+```{r}
+number_na <- sum(is.na(activities$steps))
+```
+There are `r number_na` missing values in the dataset.
+
+2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+
+Let's fill in the missing values based on the mean for a given 5-minute interval:
+```{r}
+activities2 <- activities
+activities2$steps <- apply(activities, 1, function(x){
+    print(str(x))
+    stop()
+})
+```
+
+
 
 
 
