@@ -5,6 +5,13 @@ output:
   html_document:
     keep_md: true
 ---
+
+```{r opts, echo = FALSE}
+knitr::opts_chunk$set(
+  fig.path = "figure/"
+)
+```
+
 ## Loading necessary libraries
 ```{r results='hide', message=FALSE}
 library(data.table)
